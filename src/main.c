@@ -208,19 +208,22 @@ bool initialize();
 
 View *rootView;
 int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        fprintf(stderr, "Usage: %s <html_file>\n", argv[0]);
+    // Construct the full path to the HTML file using the working directory
+    char htmlFilePath[256]; // Adjust the size as needed
+    if (argc == 0 || argc == 1) {
+        // No file specified, use default index.html
+        snprintf(htmlFilePath, sizeof(htmlFilePath), "%s", "../index.html");
+    } else if (argc == 2) {
+        snprintf(htmlFilePath, sizeof(htmlFilePath), "%s", argv[1]);
+    } else {
+        fprintf(stderr, "Usage: %s [html_file]\n", argv[0]);
         return -1;
     }
+    printf("%s\n%s\n%s\n", argv[0], argv[1], argv[2]);
 
     if (!initialize()) {
         return -1;
     }
-
-    // Construct the full path to the HTML file using the working directory
-    char htmlFilePath[256]; // Adjust the size as needed
-    snprintf(htmlFilePath, sizeof(htmlFilePath), "%s", argv[1]);
-    printf("%s\n%s\n%s\n", argv[0], argv[1], argv[2]);
 
     rootView = parse_html_file(htmlFilePath);
     if (!rootView) {
