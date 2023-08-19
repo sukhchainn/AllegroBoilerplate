@@ -1,22 +1,20 @@
 // user_interface.c
 #include "user_interface.h"
-#include <allegro5/allegro_primitives.h>
-#include <allegro5/allegro_native_dialog.h> // For error handling
-#include <allegro5/allegro_font.h>
-#include <allegro5/allegro_ttf.h>
+#include "button.h" // Include the button header
 
 ALLEGRO_FONT *font;
 int counter = 0;
 bool buttonPressed = false;
+Button *clickButton; // Declare the button
 
 void initialize_user_interface() {
     font = al_create_builtin_font();
+    clickButton = create_button(10, 10, 100, 30, al_map_rgb(100, 100, 100), "Click Me");
 }
 
 void draw_user_interface() {
     // Draw the button
-    al_draw_filled_rectangle(10, 10, 110, 40, al_map_rgb(100, 100, 100));
-    al_draw_text(font, al_map_rgb(255, 255, 255), 60, 20, ALLEGRO_ALIGN_CENTER, "Click Me");
+    draw_button(clickButton, font);
 
     // Draw the counter
     al_draw_textf(font, al_map_rgb(0, 0, 0), al_get_display_width(al_get_current_display()) - 10, 10, ALLEGRO_ALIGN_RIGHT, "Count: %d", counter);
@@ -28,21 +26,22 @@ void handle_user_interface_events(ALLEGRO_EVENT event) {
             int mouseX = event.mouse.x;
             int mouseY = event.mouse.y;
 
-            if (mouseX >= 10 && mouseX <= 110 && mouseY >= 10 && mouseY <= 40) {
+            if (is_button_clicked(clickButton, mouseX, mouseY)) {
                 // Button is clicked
-                buttonPressed = true;
+                clickButton->pressed = true;
             }
         }
     }
 }
 
 void update_user_interface() {
-    if (buttonPressed) {
+    if (clickButton->pressed) {
         counter++;
-        buttonPressed = false;
+        clickButton->pressed = false;
     }
 }
 
 void destroy_user_interface() {
     al_destroy_font(font);
+    destroy_button(clickButton);
 }

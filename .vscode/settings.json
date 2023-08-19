@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "button.h": "c",
+        "allegro_primitives.h": "c",
+        "allegro_font.h": "c"
+    }
+}
