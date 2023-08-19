@@ -136,101 +136,101 @@ void free_view_hierarchy(View *view) {
     free(view);
 }
 
-int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        fprintf(stderr, "Usage: %s <html_file>\n", argv[0]);
-        return -1;
-    }
+// int main(int argc, char *argv[]) {
+//     if (argc != 2) {
+//         fprintf(stderr, "Usage: %s <html_file>\n", argv[0]);
+//         return -1;
+//     }
 
-    if (!initialize()) {
-        return -1;
-    }
+//     if (!initialize()) {
+//         return -1;
+//     }
 
-    al_init_primitives_addon();
-    al_install_keyboard();
+//     al_init_primitives_addon();
+//     al_install_keyboard();
 
-    // Parse HTML file and generate view hierarchy
-    View *rootView = parse_html("<div><div></div><p></p></div>");
+//     // Parse HTML file and generate view hierarchy
+//     View *rootView = parse_html("<div><div></div><p></p></div>");
 
-    ALLEGRO_DISPLAY *display = al_create_display(800, 600);
-    if (!display) {
-        fprintf(stderr, "Failed to create display.\n");
-        return -1;
-    }
+//     ALLEGRO_DISPLAY *display = al_create_display(800, 600);
+//     if (!display) {
+//         fprintf(stderr, "Failed to create display.\n");
+//         return -1;
+//     }
 
-    bool running = true;
-    while (running) {
-        ALLEGRO_EVENT event;
-        al_wait_for_event(eventQueue, &event);
+//     bool running = true;
+//     while (running) {
+//         ALLEGRO_EVENT event;
+//         al_wait_for_event(eventQueue, &event);
 
-        if (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-            running = false;
-        }
+//         if (event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+//             running = false;
+//         }
 
-        al_clear_to_color(al_map_rgb(255, 255, 255));
+//         al_clear_to_color(al_map_rgb(255, 255, 255));
 
-        // Render the view hierarchy
-        render_view(rootView);
+//         // Render the view hierarchy
+//         render_view(rootView);
 
-        al_flip_display();
-    }
+//         al_flip_display();
+//     }
 
-    // Free memory
-    free_view_hierarchy(rootView);
+//     // Free memory
+//     free_view_hierarchy(rootView);
 
-    al_destroy_display(display);
+//     al_destroy_display(display);
 
-    return 0;
-}
-
-
-bool initialize() {
-    if (!al_init()) {
-        al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize Allegro!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
-        return false;
-    }
-    if (!al_install_keyboard()) {
-        al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize Keyboard!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
-        return false;
-    }
-    if (!al_install_mouse()) {
-        al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize Mouse!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
-        return false;
-    }
-    if (!al_init_primitives_addon()) {
-        al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize Primitives Addon!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
-        return false;
-    }
-    if (!al_init_font_addon()) {
-        al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize font addon!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
-    }
-    if (!al_init_ttf_addon()) {
-        al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize ttf addon!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
-    }
+//     return 0;
+// }
 
 
-    display = al_create_display(viewportWidth, viewportHeight);
-    if (!display) {
-        al_show_native_message_box(NULL, "Error", "Error", "Failed to create display!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
-        return false;
-    }
+// bool initialize() {
+//     if (!al_init()) {
+//         al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize Allegro!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
+//         return false;
+//     }
+//     if (!al_install_keyboard()) {
+//         al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize Keyboard!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
+//         return false;
+//     }
+//     if (!al_install_mouse()) {
+//         al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize Mouse!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
+//         return false;
+//     }
+//     if (!al_init_primitives_addon()) {
+//         al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize Primitives Addon!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
+//         return false;
+//     }
+//     if (!al_init_font_addon()) {
+//         al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize font addon!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
+//     }
+//     if (!al_init_ttf_addon()) {
+//         al_show_native_message_box(NULL, "Error", "Error", "Failed to initialize ttf addon!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
+//     }
 
-    al_init_primitives_addon();
 
-    eventQueue = al_create_event_queue();
-    if (!eventQueue) {
-        al_show_native_message_box(NULL, "Error", "Error", "Failed to create event queue!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
-        al_destroy_display(display);
-        return false;
-    }
+//     display = al_create_display(viewportWidth, viewportHeight);
+//     if (!display) {
+//         al_show_native_message_box(NULL, "Error", "Error", "Failed to create display!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
+//         return false;
+//     }
 
-    al_register_event_source(eventQueue, al_get_display_event_source(display));
-    al_register_event_source(eventQueue, al_get_keyboard_event_source());
-    al_register_event_source(eventQueue, al_get_mouse_event_source());
+//     al_init_primitives_addon();
 
-    // Initialize drawing and UI components
-    initialize_drawing();
-    initialize_user_interface();
+//     eventQueue = al_create_event_queue();
+//     if (!eventQueue) {
+//         al_show_native_message_box(NULL, "Error", "Error", "Failed to create event queue!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
+//         al_destroy_display(display);
+//         return false;
+//     }
 
-    return true;
-}
+//     al_register_event_source(eventQueue, al_get_display_event_source(display));
+//     al_register_event_source(eventQueue, al_get_keyboard_event_source());
+//     al_register_event_source(eventQueue, al_get_mouse_event_source());
+
+//     // Initialize drawing and UI components
+//     initialize_drawing();
+//     initialize_user_interface();
+
+//     return true;
+// }
